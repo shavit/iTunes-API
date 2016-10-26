@@ -4,13 +4,13 @@ defmodule ItunesApiTest do
 
   def params do
     %{
-        "term" => "XO",
-        "country" => "US",
-        "media" => "all",
-        # "entity" => "all",
-        "limit" => "40",
-        "lang" => "en_us",
-        "explicit" => "yes"
+      "term" => "XO",
+      "country" => "US",
+      "media" => "all",
+      # "entity" => "all",
+      "limit" => "40",
+      "lang" => "en_us",
+      "explicit" => "yes"
     }
   end
 
@@ -25,27 +25,22 @@ defmodule ItunesApiTest do
   Should make a successfull URL request
   """
   test "make an API request" do
-    {:ok,
-      {{_version, _code, _reason}, _headers, body}
-      } = ItunesApi.request(params)
-    
-    assert body != None
+    {:ok, {{_version, _code, _reason}, _headers, body}} = ItunesApi.request(params)
+    assert %{"resultCount" => _result_count, "results" => results} = ItunesApi.parse(body)
+    assert is_list(results)
   end
 
   test "search for music" do
-    {:ok,
-      {{_version, _code, _reason}, _headers, body}
-      } = ItunesApi.request(Map.put(params, "media", "music"))
+    {:ok, {{_version, _code, _reason}, _headers, body}} =
+      ItunesApi.request(Map.put(params, "media", "music"))
 
     assert body != None
   end
 
   test "search for podcast" do
-    {:ok,
-      {{_version, _code, _reason}, _headers, body}
-      } = ItunesApi.request(Map.put(params, "media", "podcast"))
+    {:ok, {{_version, _code, _reason}, _headers, body}} =
+      ItunesApi.request(Map.put(params, "media", "podcast"))
 
     assert body != None
   end
-
 end
